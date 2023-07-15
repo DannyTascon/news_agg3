@@ -12,7 +12,7 @@ urlpatterns = [
     path('accounts/profile/', views.profile, name='profile'),
     path('', views.home, name='home'),
     path('sources/', views.sources, name='sources'),
-    path('shopping/', views.shopping, name='shopping'),
+    path('sports/', views.sports, name='sports'),
     path('politics/', views.politics, name='politics'),  # updated
     path('entertainment/', views.entertainment, name='entertainment'),  # updated
 ]

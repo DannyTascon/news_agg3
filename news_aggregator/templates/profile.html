@@ -47,7 +47,19 @@
       <li>No viewed articles in the past 7 days.</li>
     {% endfor %}
   </ul>
+
+  <h3 class="category-title">Sports</h3>
+  <ul class="articles-list">
+    {% for viewed_article in viewed_articles_sports %}
+      <li>{{ viewed_article.article.title }}</li>
+      <!-- <p>{{ viewed_article.article.description }}</p> -->
+      <!-- Display other relevant information -->
+    {% empty %}
+      <li>No viewed articles in the past 7 days.</li>
+    {% endfor %}
+  </ul>
 {% endblock %}
+
 
 
 
