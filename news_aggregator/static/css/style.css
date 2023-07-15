@@ -1,0 +1,144 @@
+/* Example CSS styles */
+
+/* Body styles */
+body {
+  background-image: url('/static/img/background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Header styles */
+header {
+  text-align: center;
+  background-color: #333;
+  color: #ebe5e5;
+  padding: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 48px;
+  color: white; /* Set header text color to white */
+}
+
+#header-buttons {
+  text-align: right;
+  margin-top: 10px;
+}
+
+#header-buttons a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+/* Navigation styles */
+nav {
+  background-color: #333;
+  color: #fff;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Main content styles */
+main {
+  padding: 20px;
+}
+
+/* Example styles for the article list on the home page */
+main ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+main ul li {
+  margin-bottom: 20px;
+}
+
+main ul li h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: white; /* Set article title color to white */
+}
+
+main ul li p {
+  margin-bottom: 5px;
+}
+
+main ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.article {
+  color: white; /* Set article text color to white */
+}
+
+h1, h2, h3 {
+  color: white; /* Set page title color to white */
+}
+
+.login-title,
+.login-form,
+.profile-title,
+.profile-content {
+  color: white; /* Set login and profile page text color to white */
+}
+
+/* Media queries for responsiveness */
+
+/* Tablets and smaller screens */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 36px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 576px) {
+  header h1 {
+    font-size: 24px;
+  }
+
+  nav ul li {
+    margin-right: 10px;
+  }
+}
+/* all this is related to the profile page*/
+.article-title,
+.article-description {
+  color: white;
+}
+
+.articles-list {
+  color: white; /* this is the color of the article on the profile page*/
+}
+
+.profile-title,
+.user-info {
+  color: white;
+}
+
+.category-title {
+  font-size: 24px; /* Adjust the font size as desired */
+}
+
+
