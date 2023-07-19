@@ -4,16 +4,18 @@
 
 {% block content %}
   <h1>Politics</h1>
-  <ul class="articles-container">
-    {% for article in articles %}
-      <li class="article">
-        <h2>{{ article.title }}</h2>
-        <a href="{{ article.link }}" style="color: rgb(34, 79, 224);">Read More</a>
-      </li>
-    {% empty %}
-      <li>No articles found.</li>
-    {% endfor %}
-  </ul>
+  <main>
+    <ul class="articles-list">
+      {% for article in articles %}
+        <li class="article{% if forloop.first %} grid-column-span-2{% endif %}">
+          <h2>{{ article.title }}</h2>
+          <a href="{{ article.link }}" style="color: rgb(34, 79, 224);">Read More</a>
+        </li>
+      {% empty %}
+        <li>No articles found.</li>
+      {% endfor %}
+    </ul>
+  </main>
 {% endblock %}
 
 

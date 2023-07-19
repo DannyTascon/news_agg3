@@ -1,41 +1,41 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect
 import feedparser
 from .models import Article, Source, ViewedArticle
 from dateutil import parser as date_parser
 from django.utils import timezone
-from django.db.models import Q
 from django.db import transaction
 from django.http import Http404
 from datetime import timedelta
+from .utils import fetch_viewed_articles
+
 
 def home(request):
     fetch_news_data(request, 'latest')
-    articles = Article.objects.filter(category='Latest').order_by('-pub_date')[:20]
+    articles = Article.objects.filter(category='Latest').order_by('-pub_date')[:5]
     context = {'articles': articles}
     return render(request, 'home.html', context)
 
 
 def politics(request):
     fetch_news_data(request, 'politics')
-    articles = Article.objects.filter(category='Politics').order_by('-pub_date')[:20]
+    articles = Article.objects.filter(category='Politics').order_by('-pub_date')[:5]
     context = {'articles': articles}
     return render(request, 'politics.html', context)
 
 
 def entertainment(request):
     fetch_news_data(request, 'entertainment')
-    articles = Article.objects.filter(category='Entertainment').order_by('-pub_date')[:20]
+    articles = Article.objects.filter(category='Entertainment').order_by('-pub_date')[:5]
     context = {'articles': articles}
     return render(request, 'entertainment.html', context)
 
 
-
 def sports(request):
     fetch_news_data(request, 'sports')
-    articles = Article.objects.filter(category='Sports').order_by('-pub_date')[:20]
+    articles = Article.objects.filter(category='Sports').order_by('-pub_date')[:5]
     context = {'articles': articles}
     return render(request, 'sports.html', context)
 
@@ -52,12 +52,10 @@ def user_login(request):
 
 
 @login_required
-def logout(request):
+def user_logout(request):
     auth_logout(request)
     return redirect('home')
 
-
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def profile(request):
@@ -70,10 +68,10 @@ def profile(request):
     viewed_articles_sports = []
 
     if user.is_authenticated:
-        viewed_articles_latest = ViewedArticle.objects.filter(user=user, article__category='Latest', viewed_at__gte=past_week)[:5]
-        viewed_articles_politics = ViewedArticle.objects.filter(user=user, article__category='Politics', viewed_at__gte=past_week)[:5]
-        viewed_articles_entertainment = ViewedArticle.objects.filter(user=user, article__category='Entertainment', viewed_at__gte=past_week)[:5]
-        viewed_articles_sports = ViewedArticle.objects.filter(user=user, article__category='Sports', viewed_at__gte=past_week)[:5]
+        viewed_articles_latest = fetch_viewed_articles(user, 'Latest', past_week, 4)
+        viewed_articles_politics = fetch_viewed_articles(user, 'Politics', past_week, 4)
+        viewed_articles_entertainment = fetch_viewed_articles(user, 'Entertainment', past_week, 4)
+        viewed_articles_sports = fetch_viewed_articles(user, 'Sports', past_week, 4)
 
     context = {
         'viewed_articles_latest': viewed_articles_latest,
@@ -82,8 +80,6 @@ def profile(request):
         'viewed_articles_sports': viewed_articles_sports,
     }
     return render(request, 'profile.html', context)
-
-
 
 
 def signup(request):
@@ -133,8 +129,8 @@ def fetch_news_data(request, category):
         ]
     elif category == 'sports':
         feed_urls = [
-        "https://rss.app/feeds/ca0hzIf5cvOSzv5Y.xml",
-    ]
+            "https://rss.app/feeds/ca0hzIf5cvOSzv5Y.xml",
+        ]
     else:
         raise Http404("Invalid category")
 
@@ -149,6 +145,7 @@ def fetch_news_data(request, category):
             link = entry.link
             pub_date_string = entry.published
             if " -" in pub_date_string:
+                pub_date
                 pub_date_string = pub_date_string.rsplit(" -", 1)[0]
             elif " +" in pub_date_string:
                 pub_date_string = pub_date_string.rsplit(" +", 1)[0]
@@ -191,49 +188,20 @@ def fetch_news_data(request, category):
                     if request.user.is_authenticated:
                         viewed_article = ViewedArticle(user=request.user, article=article)
                         viewed_articles.append(viewed_article)
+                        viewed_article.save()
 
     if category == 'politics':
-        articles = Article.objects.filter(category='Politics').order_by('-pub_date')[:20]
+        articles = Article.objects.filter(category='Politics').order_by('-pub_date')[:5]
         template_name = 'politics.html'
     elif category == 'entertainment':
-        articles = Article.objects.filter(category='Entertainment').order_by('-pub_date')[:20]
+        articles = Article.objects.filter(category='Entertainment').order_by('-pub_date')[:5]
         template_name = 'entertainment.html'
     elif category == 'sports':
-        articles = Article.objects.filter(category='Sports').order_by('-pub_date')[:20]
+        articles = Article.objects.filter(category='Sports').order_by('-pub_date')[:5]
         template_name = 'sports.html'
     else:
-        articles = Article.objects.all().order_by('-pub_date')[:20]
+        articles = Article.objects.all().order_by('-pub_date')[:5]
         template_name = 'home.html'
 
     context = {'articles': articles}
     return render(request, template_name, context)
-
-# Rest of the code
-
-
-    # Rest of the code
-
-def fetch_viewed_articles(request):
-    if request.user.is_authenticated:
-        user = request.user
-        past_week = timezone.now() - timedelta(days=7)
-
-        viewed_articles_latest = ViewedArticle.objects.filter(user=user, article__category='Latest', viewed_at__gte=past_week)[:5]
-        viewed_articles_politics = ViewedArticle.objects.filter(user=user, article__category='Politics', viewed_at__gte=past_week)[:5]
-        viewed_articles_entertainment = ViewedArticle.objects.filter(user=user, article__category='Entertainment', viewed_at__gte=past_week)[:5]
-        viewed_articles_sports = ViewedArticle.objects.filter(user=user, article__category='Sports', viewed_at__gte=past_week)[:5]
-
-        
-        viewed_articles = []
-        viewed_articles.extend(viewed_articles_latest)
-        viewed_articles.extend(viewed_articles_politics)
-        viewed_articles.extend(viewed_articles_entertainment)
-        viewed_articles.extend(viewed_articles_sports)
-
-        return viewed_articles
-    else:
-        return []
-
-
-
-

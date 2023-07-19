@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+<body class="profile-page">
   <h2 class="profile-title">User Profile</h2>
   <p class="user-info">Username: {{ user.username }}</p>
   <p class="user-info">Email: {{ user.email }}</p>
@@ -58,7 +59,11 @@
       <li>No viewed articles in the past 7 days.</li>
     {% endfor %}
   </ul>
+</body>
 {% endblock %}
+
+
+
 
 
 

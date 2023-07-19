@@ -15,6 +15,7 @@ urlpatterns = [
     path('sports/', views.sports, name='sports'),
     path('politics/', views.politics, name='politics'),  # updated
     path('entertainment/', views.entertainment, name='entertainment'),  # updated
+    path('profile/', views.profile, name='profile'),
 ]
 
 

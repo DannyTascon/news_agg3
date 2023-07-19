@@ -1,54 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Politics{% endblock %}
+{% block title %}Entertainment{% endblock %}
 
 {% block content %}
   <h1>Entertainment</h1>
-  <ul class="articles-container">
-    {% for article in articles %}
-      <li class="article">
-        <h2>{{ article.title }}</h2>
-        <a href="{{ article.link }}" style="color: rgb(34, 79, 224);">Read More</a>
-      </li>
-    {% empty %}
-      <li>No articles found.</li>
-    {% endfor %}
-  </ul>
-  
-  {% if articles.has_next %}
-    <button id="load-more-button">Load More</button>
-  {% endif %}
-  
-  <script>
-    const loadMoreButton = document.getElementById('load-more-button');
-    let offset = 20;  // Initial offset for fetching next set of articles
-    
-    loadMoreButton.addEventListener('click', () => {
-      // Fetch next set of articles
-      fetch(`/fetch-news-data/entertainment/?offset=${offset}`)
-        .then(response => response.json())
-        .then(data => {
-          const articlesContainer = document.querySelector('.articles-container');
-          // Append new articles to the page
-          data.articles.forEach(article => {
-            const articleElement = document.createElement('li');
-            articleElement.classList.add('article');
-            articleElement.innerHTML = `
-              <h2>${article.title}</h2>
-              <a href="${article.link}" style="color: blue;">Read More</a>
-            `;
-            articlesContainer.appendChild(articleElement);
-          });
-          
-          // Increment offset for the next fetch
-          offset += 20;
-          
-          // Hide the "Load More" button if no more articles
-          if (!data.has_next) {
-            loadMoreButton.style.display = 'none';
-          }
-        })
-        .catch(error => console.error(error));
-    });
-  </script>
+  <main>
+    <ul class="articles-list">
+      {% for article in articles %}
+        <li class="article{% if forloop.first %} grid-column-span-2{% endif %}">
+          <h2>{{ article.title }}</h2>
+          <a href="{{ article.link }}" style="color: rgb(34, 79, 224);">Read More</a>
+        </li>
+      {% empty %}
+        <li>No articles found.</li>
+      {% endfor %}
+    </ul>
+  </main>
 {% endblock %}
+
