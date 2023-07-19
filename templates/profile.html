@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% load static %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<body class="profile-page">
+  <h2 class="profile-title">User Profile</h2>
+  <p class="user-info">Username: {{ user.username }}</p>
+  <p class="user-info">Email: {{ user.email }}</p>
+
+  <h2>Recently Viewed Articles</h2>
+
+  <h3 class="category-title">Latest News</h3>
+  <ul class="articles-list">
+    {% for viewed_article in viewed_articles_latest %}
+      <li>{{ viewed_article.article.title }}</li>
+      <!-- <p>{{ viewed_article.article.description }}</p> -->
+      <!-- Display other relevant information -->
+    {% empty %}
+      <li>No viewed articles in the past 7 days.</li>
+    {% endfor %}
+  </ul>
+
+  <h3 class="category-title">Politics</h3>
+  <ul class="articles-list">
+    {% for viewed_article in viewed_articles_politics %}
+      <li>{{ viewed_article.article.title }}</li>
+      <!-- <p>{{ viewed_article.article.description }}</p> -->
+      <!-- Display other relevant information -->
+    {% empty %}
+      <li>No viewed articles in the past 7 days.</li>
+    {% endfor %}
+  </ul>
+
+  <h3 class="category-title">Entertainment</h3>
+  <ul class="articles-list">
+    {% for viewed_article in viewed_articles_entertainment %}
+      <li>{{ viewed_article.article.title }}</li>
+      <!-- <p>{{ viewed_article.article.description }}</p> -->
+      <!-- Display other relevant information -->
+    {% empty %}
+      <li>No viewed articles in the past 7 days.</li>
+    {% endfor %}
+  </ul>
+
+  <h3 class="category-title">Sports</h3>
+  <ul class="articles-list">
+    {% for viewed_article in viewed_articles_sports %}
+      <li>{{ viewed_article.article.title }}</li>
+      <!-- <p>{{ viewed_article.article.description }}</p> -->
+      <!-- Display other relevant information -->
+    {% empty %}
+      <li>No viewed articles in the past 7 days.</li>
+    {% endfor %}
+  </ul>
+</body>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

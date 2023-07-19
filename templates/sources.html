@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Sources</h1>
+  <ul>
+    {% for source in sources %}
+      <li>{{ source.name }}</li>
+    {% empty %}
+      <li>No sources found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+
