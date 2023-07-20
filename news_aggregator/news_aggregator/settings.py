@@ -15,6 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)  # Print the value of BASE_DIR
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +27,10 @@ SECRET_KEY = "django-insecure-!pttp8*=p^ldy*d)t8xys!o(bx*y4b3231m572l+*b=(a_^fog
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'dinodino-news-d31111065d66.herokuapp.com',
+]
+
 
 
 # Application definition
@@ -120,7 +124,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 
 # Default primary key field type
