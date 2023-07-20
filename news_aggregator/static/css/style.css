@@ -130,35 +130,34 @@ main ul li a {
   font-size: var(--fs-400);
   padding: 2rem;
   border-radius: 0.5rem;
-  box-shadow: 2.5rem 3.75rem 3rem -3rem hsl(var(--clr-secondary-400) / 0.25);
-  background-image: url('/static/img/background.jpg');
-  background-repeat: no-repeat;
-  background-position: top right 10%;
-  background-color: #b5b4cb;
-  color: #333;
+  background: rgba(128, 128, 128, 0.8); /* Adjust the RGBA values and transparency as needed */
+  box-shadow: 2.5rem 3.75rem 3rem -3rem hsl(var(--clr-secondary-400) / 0.3);
+  background-image: none; /* Remove the background image */
 }
+
+
 
 /* articles individual grids*/
 
 .grid-column-span-2 {
   grid-column: span 2;
-  background: rgb(5, 46, 130);
+  background: rgb(5, 46, 130, 0.8);
 }
 
 .article:nth-child(3){
-  background: gray;
+  background: rgba(173, 183, 199, 0.8);
 }
 
 .article:nth-child(4){
   grid-column: span 2;
-  background: rgb(54, 119, 234);
+  background: rgb(54, 119, 234, 0.8);
 }
 
-.article:last-child{
+.article:last-child {
   grid-column-start: 4;
   grid-row-start: 1;
   grid-row-end: 3;
-  background: rgb(4, 19, 134);
+  background: rgba(4, 19, 134, 0.8);
 }
 
 h1,
