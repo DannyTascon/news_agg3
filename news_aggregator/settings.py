@@ -26,7 +26,10 @@ SECRET_KEY = "django-insecure-!pttp8*=p^ldy*d)t8xys!o(bx*y4b3231m572l+*b=(a_^fog
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'dinodino-news-d31111065d66.herokuapp.com',
+]
+
 
 
 # Application definition
