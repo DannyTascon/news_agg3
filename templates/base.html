@@ -72,6 +72,12 @@
                 <li><a href="{% url 'profile' %}">Profile</a></li>
             {% endif %}
         </ul>
+
+        <!-- Search bar -->
+        <form method="GET" class="search-form" id="search-form">
+            <input type="text" name="q" placeholder="Search for news...">
+            <button type="submit">Search</button>
+        </form>
     </nav>
     
     <main>
@@ -92,4 +98,4 @@
         </nav>
     </footer>
 </body>
-</html>v
+</html>

@@ -1,15 +1,11 @@
-
 {% extends 'base.html' %}
 
 {% block title %}Latest News{% endblock %}
 
 {% block content %}
   <h1>Latest News</h1>
-  <form method="GET" class="search-form">
-    <input type="text" name="q" placeholder="Search for news...">
-    <button type="submit">Search</button>
-  </form>
   <main>
+    {% load cache %}
     {% cache 600 "articles_list" %} 
       <ul class="articles-list">
         {% for article in articles %}
