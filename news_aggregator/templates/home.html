@@ -5,19 +5,26 @@
 
 {% block content %}
   <h1>Latest News</h1>
+  <form method="GET" class="search-form">
+    <input type="text" name="q" placeholder="Search for news...">
+    <button type="submit">Search</button>
+  </form>
   <main>
-    <ul class="articles-list">
-      {% for article in articles %}
-        <li class="article{% if forloop.first %} grid-column-span-2{% endif %}">
-          <h2>{{ article.title }}</h2>
-          <a href="{{ article.link }}" style="color: rgb(31, 36, 54);">Read More</a>
-        </li>
-      {% empty %}
-        <li>No articles found.</li>
-      {% endfor %}
-    </ul>
+    {% cache 600 "articles_list" %} 
+      <ul class="articles-list">
+        {% for article in articles %}
+          <li class="article{% if forloop.first %} grid-column-span-2{% endif %}">
+            <h2>{{ article.title }}</h2>
+            <a href="{{ article.link }}" style="color: rgb(31, 36, 54);">Read More</a>
+          </li>
+        {% empty %}
+          <li>No articles found.</li>
+        {% endfor %}
+      </ul>
+    {% endcache %}
   </main>
 {% endblock %}
+
 
 
 

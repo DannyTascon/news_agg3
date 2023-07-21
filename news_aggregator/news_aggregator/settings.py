@@ -140,3 +140,18 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGOUT_REDIRECT_URL = 'home'
+
+# Implement Caching for Database Queries
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+
+# Use caching for database queries
+CACHE_MIDDLEWARE_SECONDS = 60 * 15  # Cache for 15 minutes
+CACHE_MIDDLEWARE_KEY_PREFIX = 'news_aggregator'
+CACHE_MIDDLEWARE_ALIAS = 'default'
