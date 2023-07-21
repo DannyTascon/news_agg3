@@ -21,13 +21,26 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
+from django.views.decorators.cache import cache_page
 
+
+from django.shortcuts import render
+from .models import Article
 
 def home(request):
-    fetch_news_data(request, 'latest')
-    articles = Article.objects.filter(category='Latest').order_by('-pub_date')[:5]
+    # Get the search query from the user (if provided)
+    search_query = request.GET.get('q')
+
+    if search_query:
+        # Filter articles based on the search query
+        articles = Article.objects.filter(title__icontains=search_query, category='Latest').order_by('-pub_date')[:5]
+    else:
+        # If no search query, display latest articles
+        articles = Article.objects.filter(category='Latest').order_by('-pub_date')[:5]
+
     context = {'articles': articles}
     return render(request, 'home.html', context)
+
 
 
 def politics(request):
@@ -273,3 +286,11 @@ def password_reset_confirm(request, uidb64, token):
 
 def password_reset_complete(request):
     return render(request, 'password_reset_complete.html')
+
+
+# Cache Views:
+
+@cache_page(60 * 15)  # Cache this view for 15 minutes
+def home(request):
+    pass
+    # Your view logic here
