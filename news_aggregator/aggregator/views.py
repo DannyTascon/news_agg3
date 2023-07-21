@@ -1,6 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth.forms import (
+    AuthenticationForm, PasswordResetForm, SetPasswordForm, UserCreationForm,
+)
+from django.contrib.auth import (
+    authenticate, get_user_model, login as auth_login, logout as auth_logout,
+)
+from django.contrib.auth.models import User  # Add this line
 from django.shortcuts import render, redirect
 import feedparser
 from .models import Article, Source, ViewedArticle
@@ -10,6 +15,12 @@ from django.db import transaction
 from django.http import Http404
 from datetime import timedelta
 from .utils import fetch_viewed_articles
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.contrib.sites.shortcuts import get_current_site
 
 
 def home(request):
@@ -205,3 +216,60 @@ def fetch_news_data(request, category):
 
     context = {'articles': articles}
     return render(request, template_name, context)
+
+def password_reset(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.get(email=email)
+            
+            # Generate the password reset token
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # Build the password reset URL
+            current_site = get_current_site(request)
+            reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+            reset_url = f'{request.scheme}://{current_site.domain}{reset_url}'
+            
+            # Render the password reset email template
+            subject = 'Reset your password'
+            message = render_to_string('password_reset_email.html', {
+                'user': user,
+                'reset_url': reset_url,
+            })
+            
+            # Send the password reset email
+            send_mail(subject, message, 'noreply@example.com', [email])
+            
+            return redirect('password_reset_done')
+    else:
+        form = PasswordResetForm()
+    
+    return render(request, 'password_reset.html', {'form': form})
+
+
+def password_reset_done(request):
+    return render(request, 'password_reset_done.html')
+
+
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = str(urlsafe_base64_decode(uidb64), 'utf-8')
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            # Process the password reset form
+            # Update the user's password and log them in
+            
+            return redirect('password_reset_complete')
+    else:
+        return render(request, 'password_reset_invalid.html')
+
+
+def password_reset_complete(request):
+    return render(request, 'password_reset_complete.html')
