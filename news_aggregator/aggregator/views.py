@@ -292,5 +292,15 @@ def password_reset_complete(request):
 
 @cache_page(60 * 15)  # Cache this view for 15 minutes
 def home(request):
-    pass
-    # Your view logic here
+    # Get the search query from the user (if provided)
+    search_query = request.GET.get('q')
+
+    if search_query:
+        # Filter articles based on the search query
+        articles = Article.objects.filter(title__icontains=search_query, category='Latest').order_by('-pub_date')[:5]
+    else:
+        # If no search query, display latest articles
+        articles = Article.objects.filter(category='Latest').order_by('-pub_date')[:5]
+
+    context = {'articles': articles}
+    return render(request, 'home.html', context)
